@@ -28,7 +28,7 @@ const Sort: React.FC = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setIsVisible((prev) => !prev)} role="button" tabIndex={0}>популярности</span>
+                <span onClick={() => setIsVisible((prev) => !prev)} role="button" tabIndex={0}>{sortList[selected]}</span>
             </div>
             { isVisible && (
                 <div className="sort__popup">
