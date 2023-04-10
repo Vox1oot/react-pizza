@@ -1,14 +1,17 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 
-const sortList = ['популярности', 'цене', 'алфавиту'];
+interface ISort {
+    list: Array<{ id: number, name: string, type: string }>,
+    value: number,
+    onChangeSort: React.Dispatch<React.SetStateAction<number>>
+}
 
-const Sort: React.FC = () => {
+const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
     const [isVisible, setIsVisible] = React.useState(false);
-    const [selected, setSelected] = React.useState(0);
 
     const toggleList = (i: number): void => {
-        setSelected(i);
+        onChangeSort(i);
         setIsVisible((prev) => !prev);
     };
 
@@ -28,18 +31,18 @@ const Sort: React.FC = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setIsVisible((prev) => !prev)} role="button" tabIndex={0}>{sortList[selected]}</span>
+                <span onClick={() => setIsVisible((prev) => !prev)} role="button" tabIndex={0}>{list[value].name}</span>
             </div>
             { isVisible && (
                 <div className="sort__popup">
                     <ul>
-                        {sortList.map((listName, i) => (
+                        {list.map(({ id, name }) => (
                             <li
-                                key={i}
-                                onClick={() => toggleList(i)}
-                                className={selected === i ? 'active' : ''}
+                                key={id}
+                                onClick={() => toggleList(id)}
+                                className={value === id ? 'active' : ''}
                             >
-                                {listName}
+                                {name}
 
                             </li>
                         ))}
