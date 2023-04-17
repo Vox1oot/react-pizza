@@ -2,9 +2,9 @@
 import React from 'react';
 
 interface ISort {
-    list: Array<{ id: number, name: string, type: string }>,
-    value: number,
-    onChangeSort: React.Dispatch<React.SetStateAction<number>>
+    list: Array<{ id: number; name: string; type: string }>;
+    value: number;
+    onChangeSort: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
@@ -31,9 +31,15 @@ const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setIsVisible((prev) => !prev)} role="button" tabIndex={0}>{list[value].name}</span>
+                <span
+                    onClick={() => setIsVisible((prev) => !prev)}
+                    role="button"
+                    tabIndex={0}
+                >
+                    {list[value].name}
+                </span>
             </div>
-            { isVisible && (
+            {isVisible && (
                 <div className="sort__popup">
                     <ul>
                         {list.map(({ id, name }) => (
@@ -43,12 +49,11 @@ const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
                                 className={value === id ? 'active' : ''}
                             >
                                 {name}
-
                             </li>
                         ))}
                     </ul>
                 </div>
-            ) }
+            )}
         </div>
     );
 };

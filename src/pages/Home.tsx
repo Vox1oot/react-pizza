@@ -5,36 +5,43 @@ import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock, { Skeleton } from '../components/PizzaBlock';
 import MyURL from '../utils/MyURL';
+import Pagination from '../components/Pagination';
+import SearchContext from '../components/Context';
 
 interface Ipizza {
-    id: number,
-    imageUrl: string,
-    title: string,
-    types: number[],
-    sizes: number[],
-    price: number,
-    category: number,
-    rating: number
+    id: number;
+    imageUrl: string;
+    title: string;
+    types: number[];
+    sizes: number[];
+    price: number;
+    category: number;
+    rating: number;
 }
 
 const sortList = [
     { id: 0, name: 'популярности', type: 'rating' },
     { id: 1, name: 'цене', type: 'price' },
-    { id: 2, name: 'алфавиту', type: 'title' },
+    { id: 2, name: 'алфавиту', type: 'title' }
 ];
 
 const link = new MyURL();
 
 const Home = () => {
-    const [pizzas, setPizzas] = React.useState<Ipizza[]>([]);
+    const [items, setItems] = React.useState<Ipizza[]>([]);
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const [categoryID, setCategoryID] = React.useState<number>(0);
+    const [currentPage, setCurrentPage] = React.useState(1);
     const [sortID, setSortID] = React.useState<number>(0);
+
+    const { searchValue } = React.useContext(SearchContext);
 
     React.useEffect(() => {
         if (!isLoading) {
             setLoading(true);
         }
+
+        link.page = currentPage;
 
         const sortedList = sortList.find(({ id }) => id === sortID);
 
@@ -48,17 +55,23 @@ const Home = () => {
             link.deleteSearParam('category');
         }
 
-        console.log(link.url);
-
-        axios
-            .get(link.url)
-            .then((response) => {
-                setPizzas(response.data);
-                setLoading(false);
-            });
+        axios.get(link.url).then((response) => {
+            setItems(response.data);
+            setLoading(false);
+        });
 
         window.scrollTo(0, 0);
-    }, [categoryID, sortID]);
+    }, [categoryID, sortID, currentPage]);
+
+    const pizzas = items
+        .filter((obj) => {
+            if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
+                return true;
+            }
+            return false;
+        })
+        .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
     return (
         <>
             <div className="content__top">
@@ -67,16 +80,14 @@ const Home = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                { isLoading
-                // eslint-disable-next-line react/no-array-index-key
-                    ? [...new Array(6)].map((elem, index) => <Skeleton key={index} />)
-                    : pizzas.map((pizza) => (
-                        <PizzaBlock
-                            key={pizza.id}
-                            {...pizza}
-                        />
-                    ))}
+                {isLoading
+                    ? [...new Array(6)].map((elem, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <Skeleton key={index} />
+                      ))
+                    : pizzas}
             </div>
+            <Pagination onChangePage={setCurrentPage} />
         </>
     );
 };

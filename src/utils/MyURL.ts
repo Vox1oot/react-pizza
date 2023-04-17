@@ -9,15 +9,25 @@ export default class MyURL {
         return this.uri.toString();
     }
 
-    public set setCategory(id:number) {
+    public set setCategory(id: number) {
         this.uri.searchParams.set('category', id.toString());
     }
 
-    public set sortType(type:string) {
+    public set sortType(type: string) {
         this.uri.searchParams.set('sortBy', type);
     }
 
-    deleteSearParam(params:string) {
+    public set page(num: number) {
+        this.uri.searchParams.set('page', num.toString());
+        this.uri.searchParams.set('limit', '4');
+    }
+
+    public set searchParam(val: string) {
+        console.log(val);
+        this.uri.searchParams.set('search', decodeURIComponent(val));
+    }
+
+    deleteSearParam(params: string) {
         this.uri.searchParams.delete(params);
     }
 }

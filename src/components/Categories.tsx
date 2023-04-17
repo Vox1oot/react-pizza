@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Dispatch, SetStateAction, SyntheticEvent } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import cn from 'classnames';
 
 interface ICategories {
-    value: number,
-    handleActive: Dispatch<SetStateAction<number>>,
+    value: number;
+    handleActive: Dispatch<SetStateAction<number>>;
 }
 
 const categories = [
@@ -13,10 +13,13 @@ const categories = [
     { id: 2, name: 'Вегетарианская' },
     { id: 3, name: 'Гриль' },
     { id: 4, name: 'Острые' },
-    { id: 5, name: 'Закрытые' },
+    { id: 5, name: 'Закрытые' }
 ];
 
-const Categories: React.FC<ICategories> = ({ value, handleActive = (f) => f }) => {
+const Categories: React.FC<ICategories> = ({
+    value,
+    handleActive = (f) => f
+}) => {
     const classActive = (id: number) => cn({ active: id === value });
 
     return (

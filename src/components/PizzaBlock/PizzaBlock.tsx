@@ -3,29 +3,29 @@
 import React from 'react';
 
 interface Iprops {
-    title: string,
-    price: number,
-    imageUrl: string,
-    sizes: number[],
-    types: number[],
+    title: string;
+    price: number;
+    imageUrl: string;
+    sizes: number[];
+    types: number[];
 }
 
 const pizzaType: [string, string] = ['Тонкое', 'Традиционное'];
 
 const PizzaBlock: React.FC<Iprops> = ({
-    title, price, imageUrl, sizes, types,
+    title,
+    price,
+    imageUrl,
+    sizes,
+    types
 }) => {
     const [activeType, setActiveType] = React.useState(0);
     const [activeSize, setActiveSize] = React.useState(0);
 
     return (
         <div className="pizza-block">
-            <img
-                className="pizza-block__image"
-                src={imageUrl}
-                alt="Pizza"
-            />
-            <h4 className="pizza-block__title">{ title }</h4>
+            <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+            <h4 className="pizza-block__title">{title}</h4>
             <div className="pizza-block__selector">
                 <ul>
                     {types.map((typeID: number, index: number) => (
@@ -35,7 +35,6 @@ const PizzaBlock: React.FC<Iprops> = ({
                             key={index}
                         >
                             {pizzaType[typeID]}
-
                         </li>
                     ))}
                 </ul>
@@ -47,7 +46,6 @@ const PizzaBlock: React.FC<Iprops> = ({
                             key={index}
                         >
                             {`${value} см.`}
-
                         </li>
                     ))}
                 </ul>
