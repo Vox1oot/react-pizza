@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Dispatch, SetStateAction } from 'react';
 import cn from 'classnames';
+import { useDispatch } from 'react-redux';
+import { handleCategoryID } from '../redux/slices/filterSlice';
 
 interface ICategories {
     value: number;
-    handleActive: Dispatch<SetStateAction<number>>;
 }
 
 const categories = [
@@ -16,10 +17,8 @@ const categories = [
     { id: 5, name: 'Закрытые' }
 ];
 
-const Categories: React.FC<ICategories> = ({
-    value,
-    handleActive = (f) => f
-}) => {
+const Categories: React.FC<ICategories> = ({ value }) => {
+    const dispatch = useDispatch();
     const classActive = (id: number) => cn({ active: id === value });
 
     return (
@@ -30,7 +29,7 @@ const Categories: React.FC<ICategories> = ({
                     <li
                         className={classActive(id)}
                         key={id}
-                        onClick={() => handleActive(id)}
+                        onClick={() => dispatch(handleCategoryID(id))}
                     >
                         {name}
                     </li>

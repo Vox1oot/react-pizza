@@ -1,17 +1,21 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectFilter, handleSortID } from '../redux/slices/filterSlice';
 
-interface ISort {
-    list: Array<{ id: number; name: string; type: string }>;
-    value: number;
-    onChangeSort: React.Dispatch<React.SetStateAction<number>>;
-}
+const sortList = [
+    { id: 0, name: 'популярности', type: 'rating' },
+    { id: 1, name: 'цене', type: 'price' },
+    { id: 2, name: 'алфавиту', type: 'title' }
+];
 
-const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
+const Sort = () => {
     const [isVisible, setIsVisible] = React.useState(false);
+    const dispatch = useDispatch();
+    const { sort } = useSelector(selectFilter);
 
     const toggleList = (i: number): void => {
-        onChangeSort(i);
+        dispatch(handleSortID(sortList[i]));
         setIsVisible((prev) => !prev);
     };
 
@@ -36,17 +40,17 @@ const Sort: React.FC<ISort> = ({ list, value, onChangeSort }) => {
                     role="button"
                     tabIndex={0}
                 >
-                    {list[value].name}
+                    {sortList[sort.id].name}
                 </span>
             </div>
             {isVisible && (
                 <div className="sort__popup">
                     <ul>
-                        {list.map(({ id, name }) => (
+                        {sortList.map(({ id, name }) => (
                             <li
                                 key={id}
                                 onClick={() => toggleList(id)}
-                                className={value === id ? 'active' : ''}
+                                className={sort.id === id ? 'active' : ''}
                             >
                                 {name}
                             </li>
