@@ -27,10 +27,8 @@ const link = new MyURL();
 const Home = () => {
     const [items, setItems] = React.useState<Ipizza[]>([]);
     const [isLoading, setLoading] = React.useState<boolean>(true);
-    const [currentPage, setCurrentPage] = React.useState(1);
 
-    const { categoryID } = useSelector(selectFilter);
-    const { sort } = useSelector(selectFilter);
+    const { categoryID, currentPage, sort } = useSelector(selectFilter);
 
     const { searchValue } = React.useContext(SearchContext);
 
@@ -80,7 +78,7 @@ const Home = () => {
                       ))
                     : pizzas}
             </div>
-            <Pagination onChangePage={setCurrentPage} />
+            <Pagination />
         </>
     );
 };
