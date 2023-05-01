@@ -9,6 +9,20 @@ export default class MyURL {
         return this.uri.toString();
     }
 
+    public get params() {
+        return this.uri;
+    }
+
+    public get searchParams() {
+        const search = this.params.search.substring(1);
+        return search.match(/\w+/g)?.reduce((acc, value, index, array) => {
+            if (index % 2 === 0) {
+                return { ...acc, [value]: array[index + 1] };
+            }
+            return acc;
+        }, {});
+    }
+
     public set setCategory(id: number) {
         this.uri.searchParams.set('category', id.toString());
     }
@@ -23,7 +37,6 @@ export default class MyURL {
     }
 
     public set searchParam(val: string) {
-        console.log(val);
         this.uri.searchParams.set('search', decodeURIComponent(val));
     }
 

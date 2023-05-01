@@ -1,10 +1,14 @@
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectCard } from '../redux/slices/cartSlice';
+
 import Search from './Search';
 import logo from '../assets/img/pizza-logo.svg';
 
 const Header = React.memo(function Header() {
+    const { totalPrice, items } = useSelector(selectCard);
+
     return (
         <div className="header">
             <div className="container">
@@ -20,7 +24,7 @@ const Header = React.memo(function Header() {
                 <Search />
                 <div className="header__cart">
                     <Link to="/cart" className="button button--cart">
-                        <span>520 ₽</span>
+                        <span>{`${totalPrice} ₽`}</span>
                         <div className="button__delimiter" />
                         <svg
                             width="18"
@@ -51,7 +55,7 @@ const Header = React.memo(function Header() {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span>3</span>
+                        <span>{items.length}</span>
                     </Link>
                 </div>
             </div>

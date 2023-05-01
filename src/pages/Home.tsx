@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { selectFilter } from '../redux/slices/filterSlice';
 
 import Categories from '../components/Categories';
@@ -29,8 +30,9 @@ const Home = () => {
     const [isLoading, setLoading] = React.useState<boolean>(true);
 
     const { categoryID, currentPage, sort } = useSelector(selectFilter);
-
     const { searchValue } = React.useContext(SearchContext);
+
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         if (!isLoading) {
@@ -50,6 +52,8 @@ const Home = () => {
             setItems(response.data);
             setLoading(false);
         });
+
+        navigate(link.params.search);
 
         window.scrollTo(0, 0);
     }, [categoryID, currentPage, sort]);

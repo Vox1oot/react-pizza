@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 interface Iprops {
+    id: number;
     title: string;
     price: number;
     imageUrl: string;
@@ -13,14 +15,30 @@ interface Iprops {
 const pizzaType: [string, string] = ['Тонкое', 'Традиционное'];
 
 const PizzaBlock: React.FC<Iprops> = ({
+    id,
     title,
     price,
     imageUrl,
     sizes,
     types
 }) => {
-    const [activeType, setActiveType] = React.useState(0);
+    const [activeType, setActiveType] = React.useState(types[0]);
     const [activeSize, setActiveSize] = React.useState(0);
+
+    console.log(activeType);
+
+    const addProduct = () => {
+        const product = {
+            id,
+            title,
+            price,
+            imageUrl,
+            type: pizzaType[activeType],
+            size: sizes[activeSize]
+        };
+
+        console.log(product);
+    };
 
     return (
         <div className="pizza-block">
@@ -31,7 +49,7 @@ const PizzaBlock: React.FC<Iprops> = ({
                     {types.map((typeID: number, index: number) => (
                         <li
                             onClick={() => setActiveType(index)}
-                            className={index === activeType ? 'active' : ''}
+                            className={typeID === activeType ? 'active' : ''}
                             key={index}
                         >
                             {pizzaType[typeID]}
@@ -52,7 +70,11 @@ const PizzaBlock: React.FC<Iprops> = ({
             </div>
             <div className="pizza-block__bottom">
                 <div className="pizza-block__price">{`от ${price} ₽`}</div>
-                <div className="button button--outline button--add">
+                <button
+                    type="button"
+                    className="button button--outline button--add"
+                    onClick={addProduct}
+                >
                     <svg
                         width="12"
                         height="12"
@@ -67,7 +89,7 @@ const PizzaBlock: React.FC<Iprops> = ({
                     </svg>
                     <span>Добавить</span>
                     <i>2</i>
-                </div>
+                </button>
             </div>
         </div>
     );

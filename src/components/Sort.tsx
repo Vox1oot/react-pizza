@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectFilter, handleSortID } from '../redux/slices/filterSlice';
 
-const sortList = [
+export const sortList = [
     { id: 0, name: 'популярности', type: 'rating' },
     { id: 1, name: 'цене', type: 'price' },
     { id: 2, name: 'алфавиту', type: 'title' }
@@ -13,14 +13,30 @@ const Sort = () => {
     const [isVisible, setIsVisible] = React.useState(false);
     const dispatch = useDispatch();
     const { sort } = useSelector(selectFilter);
+    const sortRef = React.useRef(null);
 
     const toggleList = (i: number): void => {
         dispatch(handleSortID(sortList[i]));
-        setIsVisible((prev) => !prev);
     };
 
+    React.useEffect(() => {
+        const handleClickOutside = (event: Event) => {
+            const nodes = Array.from(event.composedPath());
+            if (sortRef.current) {
+                if (!nodes.includes(sortRef.current)) {
+                    setIsVisible(() => false);
+                }
+            }
+        };
+
+        document.body.addEventListener('click', handleClickOutside);
+
+        return () =>
+            document.body.removeEventListener('click', handleClickOutside);
+    }, []);
+
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     width="10"
