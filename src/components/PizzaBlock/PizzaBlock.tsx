@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, selectCard, itemType } from '../../redux/slices/cartSlice';
 
 interface Iprops {
     id: number;
@@ -14,6 +15,16 @@ interface Iprops {
 
 const pizzaType: [string, string] = ['Тонкое', 'Традиционное'];
 
+const getCount = (currentID: number, items: itemType[]) =>
+    items.reduce((sum: number, item: itemType) => {
+        if (item.id === currentID) {
+            const newSum = sum + 1;
+            return newSum;
+        }
+
+        return sum;
+    }, 0);
+
 const PizzaBlock: React.FC<Iprops> = ({
     id,
     title,
@@ -24,8 +35,8 @@ const PizzaBlock: React.FC<Iprops> = ({
 }) => {
     const [activeType, setActiveType] = React.useState(types[0]);
     const [activeSize, setActiveSize] = React.useState(0);
-
-    console.log(activeType);
+    const dispatch = useDispatch();
+    const { items } = useSelector(selectCard);
 
     const addProduct = () => {
         const product = {
@@ -37,7 +48,7 @@ const PizzaBlock: React.FC<Iprops> = ({
             size: sizes[activeSize]
         };
 
-        console.log(product);
+        dispatch(addItem(product));
     };
 
     return (
@@ -88,7 +99,7 @@ const PizzaBlock: React.FC<Iprops> = ({
                         />
                     </svg>
                     <span>Добавить</span>
-                    <i>2</i>
+                    <i>{getCount(id, items)}</i>
                 </button>
             </div>
         </div>
