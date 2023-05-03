@@ -1,11 +1,18 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCard, itemType } from '../redux/slices/cartSlice';
+import {
+    addItem,
+    selectCard,
+    itemType,
+    clearItems
+} from '../redux/slices/cartSlice';
 import CardItem from '../components/CartItem';
 
 const Cart = () => {
-    const { items } = useSelector(selectCard);
+    const { items, totalPrice, totalCount } = useSelector(selectCard);
+    const dispatch = useDispatch();
 
     return (
         <div className="container container--cart">
@@ -81,7 +88,9 @@ const Cart = () => {
                             />
                         </svg>
 
-                        <span>Очистить корзину</span>
+                        <span onClick={() => dispatch(clearItems())}>
+                            Очистить корзину
+                        </span>
                     </div>
                 </div>
                 <div className="content__items">
@@ -93,11 +102,11 @@ const Cart = () => {
                     <div className="cart__bottom-details">
                         <span>
                             {' '}
-                            Всего пицц: <b>{/* {totalCount} */} шт.</b>{' '}
+                            Всего пицц: <b>{totalCount} шт.</b>{' '}
                         </span>
                         <span>
                             {' '}
-                            Сумма заказа: <b>{/* {totalPrice} */} ₽</b>{' '}
+                            Сумма заказа: <b>{totalPrice} ₽</b>{' '}
                         </span>
                     </div>
                     <div className="cart__bottom-buttons">

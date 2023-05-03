@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { removeItem } from '../../redux/slices/cartSlice';
 
 type CartItemProps = {
     id: number;
@@ -17,6 +20,8 @@ const CardItem = ({
     price,
     imageUrl
 }: CartItemProps) => {
+    const dispatch = useDispatch();
+
     return (
         <div className="cart__item">
             <div className="cart__item-img">
@@ -54,7 +59,7 @@ const CardItem = ({
                         />
                     </svg>
                 </button>
-                <b>10</b>
+                <b>1</b>
                 <button
                     type="button"
                     className="button button--outline button--circle cart__item-count-plus"
@@ -81,7 +86,10 @@ const CardItem = ({
                 <b>{price} ₽</b>
             </div>
             <div className="cart__item-remove">
-                <div className="button button--outline button--circle">
+                <div
+                    className="button button--outline button--circle"
+                    onClick={() => dispatch(removeItem({ id, price }))}
+                >
                     <svg
                         width="10"
                         height="10"

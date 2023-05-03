@@ -12,11 +12,13 @@ export type itemType = {
 
 interface cartState {
     totalPrice: number;
+    totalCount: number;
     items: Array<itemType>;
 }
 
 const initialState: cartState = {
     totalPrice: 0,
+    totalCount: 0,
     items: []
 };
 
@@ -30,14 +32,19 @@ export const cartSlice = createSlice({
                 const newPrice = acc + item.price;
                 return newPrice;
             }, 0);
+            state.totalCount += 1;
         },
         removeItem: (state, action) => {
             state.items = state.items.filter(
-                (item) => item.id !== action.payload
+                (item) => item.id !== action.payload.id
             );
+            state.totalCount -= 1;
+            state.totalPrice -= action.payload.price;
         },
         clearItems: (state) => {
             state.items = [];
+            state.totalPrice = 0;
+            state.totalCount = 0;
         }
     }
 });
