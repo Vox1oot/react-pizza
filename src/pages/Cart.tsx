@@ -9,10 +9,15 @@ import {
     clearItems
 } from '../redux/slices/cartSlice';
 import CardItem from '../components/CartItem';
+import CartEmpty from '../components/CartEmpty';
 
 const Cart = () => {
     const { items, totalPrice, totalCount } = useSelector(selectCard);
     const dispatch = useDispatch();
+
+    if (totalPrice === 0) {
+        return <CartEmpty />;
+    }
 
     return (
         <div className="container container--cart">
