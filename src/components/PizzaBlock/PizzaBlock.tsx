@@ -16,14 +16,9 @@ interface Iprops {
 const pizzaType: [string, string] = ['Тонкое', 'Традиционное'];
 
 const getCount = (currentID: number, items: itemType[]) =>
-    items.reduce((sum: number, item: itemType) => {
-        if (item.id === currentID) {
-            const newSum = sum + 1;
-            return newSum;
-        }
-
-        return sum;
-    }, 0);
+    items
+        .filter(({ id }) => id === currentID)
+        .reduce((acc, { count }) => (acc += count), 0);
 
 const PizzaBlock: React.FC<Iprops> = ({
     id,
@@ -45,7 +40,8 @@ const PizzaBlock: React.FC<Iprops> = ({
             price,
             imageUrl,
             type: pizzaType[activeType],
-            size: sizes[activeSize]
+            size: sizes[activeSize],
+            count: 1
         };
 
         dispatch(addItem(product));

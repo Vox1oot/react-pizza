@@ -8,6 +8,7 @@ export type itemType = {
     imageUrl: string;
     type: string;
     size: number;
+    count: number;
 };
 
 interface cartState {
@@ -22,17 +23,34 @@ const initialState: cartState = {
     items: []
 };
 
+const incerementPriceAndCount = (state: cartState) => {
+    state.totalPrice = state.items.reduce((acc: number, item: itemType) => {
+        const newPrice = acc + item.price * item.count;
+        return newPrice;
+    }, 0);
+    state.totalCount += 1;
+};
+
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
         addItem: (state, { payload }: PayloadAction<itemType>) => {
+            for (let i = 0; i < state.items.length; i += 1) {
+                const currentItem = state.items[i];
+
+                if (
+                    currentItem.id === payload.id &&
+                    currentItem.size === payload.size
+                ) {
+                    currentItem.count += 1;
+                    incerementPriceAndCount(state);
+                    return;
+                }
+            }
+
             state.items.push(payload);
-            state.totalPrice = state.items.reduce((acc, item) => {
-                const newPrice = acc + item.price;
-                return newPrice;
-            }, 0);
-            state.totalCount += 1;
+            incerementPriceAndCount(state);
         },
         removeItem: (state, action) => {
             state.items = state.items.filter(

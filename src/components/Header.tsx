@@ -7,7 +7,7 @@ import Search from './Search';
 import logo from '../assets/img/pizza-logo.svg';
 
 const Header = React.memo(function Header() {
-    const { totalPrice, items } = useSelector(selectCard);
+    const { totalPrice, totalCount } = useSelector(selectCard);
 
     return (
         <div className="header">
@@ -55,7 +55,7 @@ const Header = React.memo(function Header() {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span>{items.length}</span>
+                        <span>{totalCount}</span>
                     </Link>
                 </div>
             </div>

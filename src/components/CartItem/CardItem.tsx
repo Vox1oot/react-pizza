@@ -10,6 +10,7 @@ type CartItemProps = {
     size: number;
     price: number;
     imageUrl: string;
+    count: number;
 };
 
 const CardItem = ({
@@ -18,7 +19,8 @@ const CardItem = ({
     type,
     size,
     price,
-    imageUrl
+    imageUrl,
+    count
 }: CartItemProps) => {
     const dispatch = useDispatch();
 
@@ -59,7 +61,7 @@ const CardItem = ({
                         />
                     </svg>
                 </button>
-                <b>1</b>
+                <b>{count}</b>
                 <button
                     type="button"
                     className="button button--outline button--circle cart__item-count-plus"
