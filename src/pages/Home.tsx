@@ -32,9 +32,17 @@ const Home = () => {
     const { categoryID, currentPage, sort } = useSelector(selectFilter);
     const { searchValue } = React.useContext(SearchContext);
 
+    console.log(categoryID);
+
     const navigate = useNavigate();
 
     React.useEffect(() => {
+        const fetchingData = async (url: string) => {
+            const response = await axios.get(url);
+            setItems(response.data);
+            setLoading(false);
+        };
+
         if (!isLoading) {
             setLoading(true);
         }
@@ -44,15 +52,12 @@ const Home = () => {
 
         if (categoryID > 0) {
             link.setCategory = categoryID;
+            link.page = 1;
         } else {
             link.deleteSearParam('category');
         }
 
-        axios.get(link.url).then((response) => {
-            setItems(response.data);
-            setLoading(false);
-        });
-
+        fetchingData(link.url);
         navigate(link.params.search);
 
         window.scrollTo(0, 0);
