@@ -2,7 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCard, itemType } from '../../redux/slices/cartSlice';
+import { addItem, itemType, selectCard } from '../../redux/slices/cartSlice';
 
 interface Iprops {
     id: number;

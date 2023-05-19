@@ -1,9 +1,10 @@
 import React from 'react';
-import axios from 'axios';
 
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectFilter } from '../redux/slices/filterSlice';
+import { selectPizza, fetchPizzas } from '../redux/slices/pizzaSlice';
+import useAppDispatch from '../components/hooks/useAppDispatch';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -12,41 +13,19 @@ import MyURL from '../utils/MyURL';
 import Pagination from '../components/Pagination';
 import SearchContext from '../components/Context';
 
-interface Ipizza {
-    id: number;
-    imageUrl: string;
-    title: string;
-    types: number[];
-    sizes: number[];
-    price: number;
-    category: number;
-    rating: number;
-}
-
 const link = new MyURL();
 
 const Home = () => {
-    const [items, setItems] = React.useState<Ipizza[]>([]);
     const [isLoading, setLoading] = React.useState<boolean>(true);
 
+    const dispatch = useAppDispatch();
     const { categoryID, currentPage, sort } = useSelector(selectFilter);
+    const { items, status } = useSelector(selectPizza);
     const { searchValue } = React.useContext(SearchContext);
-
-    console.log(categoryID);
 
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        const fetchingData = async (url: string) => {
-            const response = await axios.get(url);
-            setItems(response.data);
-            setLoading(false);
-        };
-
-        if (!isLoading) {
-            setLoading(true);
-        }
-
         link.page = currentPage;
         link.sortType = sort.type;
 
@@ -57,7 +36,12 @@ const Home = () => {
             link.deleteSearParam('category');
         }
 
-        fetchingData(link.url);
+        try {
+            dispatch(fetchPizzas(link.url));
+            setLoading(false);
+        } catch (error) {
+            console.log('ERROR');
+        }
         navigate(link.params.search);
 
         window.scrollTo(0, 0);
@@ -80,7 +64,7 @@ const Home = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {isLoading
+                {status === 'LOADING'
                     ? [...new Array(6)].map((elem, index) => (
                           // eslint-disable-next-line react/no-array-index-key
                           <Skeleton key={index} />

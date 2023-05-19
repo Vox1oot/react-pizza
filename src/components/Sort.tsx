@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-import React, { SyntheticEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectFilter, handleSortID } from '../redux/slices/filterSlice';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleSortID, selectFilter } from '../redux/slices/filterSlice';
 
 export const sortList = [
     { id: 0, name: 'популярности', type: 'rating' },
