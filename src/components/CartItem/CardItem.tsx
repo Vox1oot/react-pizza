@@ -1,28 +1,20 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { removeItem } from '../../redux/slices/cartSlice';
+import { addItem, clearCard, removeItem } from '../../redux/slices/cartSlice';
+import type { itemType } from '../../redux/slices/cartSlice';
 
-type CartItemProps = {
-    id: number;
-    title: string;
-    type: string;
-    size: number;
-    price: number;
-    imageUrl: string;
-    count: number;
-};
-
-const CardItem = ({
-    id,
-    title,
-    type,
-    size,
-    price,
-    imageUrl,
-    count
-}: CartItemProps) => {
+const CardItem = (props: itemType) => {
+    const { id, imageUrl, title, type, size, price, count } = props;
     const dispatch = useDispatch();
+
+    const increaseItem = () => {
+        dispatch(addItem(props));
+    };
+
+    const decraseItem = () => {
+        dispatch(removeItem(props));
+    };
 
     return (
         <div className="cart__item">
@@ -41,6 +33,7 @@ const CardItem = ({
             </div>
             <div className="cart__item-count">
                 <button
+                    onClick={decraseItem}
                     type="button"
                     className="button button--outline button--circle cart__item-count-minus"
                 >
@@ -63,6 +56,7 @@ const CardItem = ({
                 </button>
                 <b>{count}</b>
                 <button
+                    onClick={increaseItem}
                     type="button"
                     className="button button--outline button--circle cart__item-count-plus"
                 >
@@ -90,7 +84,7 @@ const CardItem = ({
             <div className="cart__item-remove">
                 <div
                     className="button button--outline button--circle"
-                    onClick={() => dispatch(removeItem({ id, price }))}
+                    onClick={() => dispatch(clearCard({ id, price }))}
                 >
                     <svg
                         width="10"

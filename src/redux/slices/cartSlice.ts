@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 
 export type itemType = {
@@ -53,6 +53,26 @@ export const cartSlice = createSlice({
             incerementPriceAndCount(state);
         },
         removeItem: (state, action) => {
+            const { id, size } = action.payload;
+            const itemIndex = state.items.findIndex(
+                (item) => item.id === id && item.size === size
+            );
+
+            if (itemIndex >= 0) {
+                const currentItem = state.items[itemIndex];
+
+                console.log(current(currentItem));
+
+                if (currentItem.count > 1) {
+                    currentItem.count -= 1;
+                } else {
+                    state.items.splice(itemIndex, 1);
+                }
+                state.totalCount -= 1;
+                state.totalPrice -= currentItem.price;
+            }
+        },
+        clearCard: (state, action) => {
             state.items = state.items.filter(
                 (item) => item.id !== action.payload.id
             );
@@ -68,7 +88,7 @@ export const cartSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addItem, removeItem, clearItems } = cartSlice.actions;
+export const { addItem, clearCard, clearItems, removeItem } = cartSlice.actions;
 export const selectCard = (state: RootState) => state.cart;
 
 export default cartSlice.reducer;
