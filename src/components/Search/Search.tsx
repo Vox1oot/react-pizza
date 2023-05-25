@@ -1,15 +1,15 @@
-import React, { SyntheticEvent, ChangeEvent, useCallback } from 'react';
-
+import React, { SyntheticEvent, useCallback } from 'react';
 import debounce from 'lodash.debounce';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GrFormClose } from 'react-icons/gr';
+import { handleSearchValue } from '../../redux/slices/filterSlice';
 import styles from './Search.module.scss';
-import SearchContext from '../Context';
+import useAppDispatch from '../hooks/useAppDispatch';
 
 const Search = () => {
     const [value, setValue] = React.useState('');
-    const { setSearchValue } = React.useContext(SearchContext);
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         if (inputRef.current) {
@@ -19,12 +19,12 @@ const Search = () => {
 
     const debounceCallback = useCallback(
         debounce((inputValue) => {
-            setSearchValue(inputValue);
+            dispatch(handleSearchValue(inputValue));
         }, 1000),
         []
     );
 
-    const handleSearchValue = (e: SyntheticEvent) => {
+    const setSearchValue = (e: SyntheticEvent) => {
         const target = e.target as HTMLInputElement;
         setValue(target.value);
         debounceCallback(target.value);
@@ -32,7 +32,7 @@ const Search = () => {
 
     const clearInput = () => {
         setValue('');
-        setSearchValue('');
+        dispatch(handleSearchValue(''));
     };
 
     return (
@@ -40,7 +40,7 @@ const Search = () => {
             <AiOutlineSearch className={styles.icon} />
             <input
                 ref={inputRef}
-                onChange={handleSearchValue}
+                onChange={setSearchValue}
                 value={value}
                 className={styles.input}
                 type="text"

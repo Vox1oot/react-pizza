@@ -19,13 +19,30 @@ export const fetchPizzas = createAsyncThunk(
     'pizza/fetchPizzas',
     async (url: string) => {
         const { data } = await axios.get(url);
+
         return data;
     }
 );
 
-const initialState: { items: Array<Ipizza>; status: statusType | '' } = {
+export const fetchPizzaInfo = createAsyncThunk(
+    'pizza/fetchPizzaInfo',
+    async (id: string) => {
+        const { data } = await axios.get(
+            `https://642466119e0a30d92b1b018c.mockapi.io/items/${id}`
+        );
+
+        return data;
+    }
+);
+
+const initialState: {
+    items: Array<Ipizza>;
+    status: statusType | '';
+    pizzaInfo: Ipizza | null;
+} = {
     items: [],
-    status: ''
+    status: '',
+    pizzaInfo: null
 };
 
 export const pizzaSlice = createSlice({
@@ -44,6 +61,9 @@ export const pizzaSlice = createSlice({
         builder.addCase(fetchPizzas.rejected, (state) => {
             state.status = 'ERROR';
             state.items = [];
+        });
+        builder.addCase(fetchPizzaInfo.fulfilled, (state, action) => {
+            state.pizzaInfo = action.payload;
         });
     }
 });

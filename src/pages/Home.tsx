@@ -11,7 +11,6 @@ import Sort from '../components/Sort';
 import PizzaBlock, { Skeleton } from '../components/PizzaBlock';
 import MyURL from '../utils/MyURL';
 import Pagination from '../components/Pagination';
-import SearchContext from '../components/Context';
 
 const link = new MyURL();
 
@@ -21,7 +20,7 @@ const Home = () => {
     const dispatch = useAppDispatch();
     const { categoryID, currentPage, sort } = useSelector(selectFilter);
     const { items, status } = useSelector(selectPizza);
-    const { searchValue } = React.useContext(SearchContext);
+    const { searchValue } = useSelector(selectFilter);
 
     const navigate = useNavigate();
 
